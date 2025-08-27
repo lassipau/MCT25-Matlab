@@ -5,9 +5,7 @@ function sol = LinSysSim(A,B,x0,ufun,tspan)
 % with initial state x(0)=x0, and u(t) = ufun(t) ('ufun' is a function
 % handle) over the time interval 'tspan'. The returned variable 'sol' is
 % the output of the Matlab's differential equation solver 'ode15s'.
-%
-% Copyright (C) 2019 by Lassi Paunonen (lassi.paunonen@tuni.fi)
 
 odefun = @(t,x) A*x + B*ufun(t);
-
-sol = ode15s(odefun,tspan,x0);
+opts = odeset('MaxStep',0.001*(tspan(2)-tspan(1)));
+sol = ode15s(odefun,tspan,x0,opts);

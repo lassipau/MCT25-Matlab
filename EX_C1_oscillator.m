@@ -1,6 +1,7 @@
 %% Simulate the harmonic oscillator
 
-r = .5;
+r = 0.5;
+% r = 0.01; % For testing "resonance"
 % r = 2;
 k = 1;
 m = 1;
@@ -11,7 +12,8 @@ B = [0;1/m];
 C = [1 0];
 D = 0;
 
-x0 = [1;0];
+x0 = [1;0.1];
+% x0 = rand(2,1)-1/2;
 tspan = [0 20];
 
 %ufun = @(t) sin(t).*cos(t);
@@ -19,12 +21,18 @@ tspan = [0 20];
 % ufun = @(t) sqrt(t);
 % ufun = @(t) rem(t,2)<=1;
 ufun = @(t) zeros(size(t));
+% ufun = @(t) 1./(1+t).^(1/2);
+% ufun = @(t) exp(-0.1*t);
+% ufun = @(t) ones(size(t));
+
+% ufun = @(t) sin(t); % For testing "resonance"
+
 
 sol = LinSysSim(A,B,x0,ufun,tspan);
 
-%figure(1)
+% figure(1)
 %LinSysStatePlot(sol,100,[tspan 1.1*[min(min(sol.y)) max(max(sol.y))]],2);
-%LinSysStatePlot(sol,100,[],2);
+% LinSysStatePlot(sol,1001,[],2);
 figure(2)
 LinSysOutputPlot(sol,C,D,ufun,401,[],2);
 %LinSysFigAdjust(axis)
@@ -36,7 +44,7 @@ grid on
 % axis([tspan -.15 1.1])
 % %
 figure(3)
-LinSysPhasePlot(sol,400,[],2);
+LinSysPhasePlot(sol,4001,[],2);
 set(gca,'tickdir','out','box','off')
 grid on
 xlabel('$q(t)$','Interpreter','latex',FontSize=20)
