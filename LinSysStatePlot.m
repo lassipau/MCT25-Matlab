@@ -12,7 +12,7 @@ tt = linspace(sol.x(1),sol.x(end),N);
 xx = deval(sol,tt);
 
 if nargin <= 3
-    LineW = 1;
+    LineW = 2;
 end
 
 plot(tt,xx,'Linewidth',LineW);

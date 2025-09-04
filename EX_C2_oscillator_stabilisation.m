@@ -1,8 +1,7 @@
-%% Simulate the harmonic oscillator
+%% Stabilise the harmonic oscillator
 
-r = 1;
-% r = 0.01; % For testing "resonance"
-% r = 2;
+
+r = 0; % no damping in the oscillator
 k = 1;
 m = 1;
 
@@ -14,26 +13,43 @@ D = 0;
 
 x0 = [1;0.1];
 % x0 = rand(2,1)-1/2;
-tspan = [0 10];
+tspan = [0 20];
 
+% Design K in such a way that A+BK is stable
+% note the conventions on the minus signs!
+
+% % Pole placement
+K = -place(A,B,[-.5+1i,-.5-1i]);
+% K = -place(A,B,[-3,-3.01])
+
+% 
+% % Q-dissipativity
+% Q = diag([k;m]);
+% K = -B'*Q;
+% 
+% % LQR
+% R = .5;
+% K = -lqr(A,B,eye(2),R,zeros(2,1));
+
+% PlotEigs(A,[-4,.5,-3,3]) % Eigenvalues of the original system
+PlotEigs(A+B*K,[-4,.5,-3,3]) % Eigenvalues of the stabilised system
+
+
+
+%% Simulate the behaviour of the stabilised oscillator (with state feedback u=Kx)
 %ufun = @(t) sin(t).*cos(t);
 % ufun = @(t) sin(t).^2;
-% ufun = @(t) sqrt(t);
-% ufun = @(t) rem(t,2)<=1;
 ufun = @(t) zeros(size(t));
-% ufun = @(t) 1./(1+t).^(1/2);
-% ufun = @(t) exp(-0.1*t);
 % ufun = @(t) ones(size(t));
 
-% ufun = @(t) sin(t); % For testing "resonance"
 
-sol = LinSysSim(A,B,x0,ufun,tspan);
+sol = LinSysSim(A+B*K,B,x0,ufun,tspan);
 
 % figure(1)
 %LinSysStatePlot(sol,100,[tspan 1.1*[min(min(sol.y)) max(max(sol.y))]],2);
 % LinSysStatePlot(sol,1001,[],2);
 figure(2)
-LinSysOutputPlot(sol,C,D,ufun,401,[],2);
+LinSysOutputPlot(sol,C+D*K,D,ufun,401,[],2);
 %LinSysFigAdjust(axis)
 %hold on
 %plot([tspan(1) tspan(2)],[0 0],'k','Linewidth',1)
@@ -51,16 +67,13 @@ ylabel('$\dot q(t)$','Interpreter','latex',FontSize=20)
 
 
 
-% %
-figure(4)
-ttu = linspace(tspan(1),tspan(2),200);
-plot(ttu,ufun(ttu),'LineWidth',2)
-% axis([tspan [min(ufun(ttu)) max(ufun(ttu))]+(max(ufun(ttu))-min(ufun(ttu)))/20*[-1 1]])
-grid on
-
-%% Plot the eigenvalues of the system
-figure(5)
-PlotEigs(A,[-3,.5,-4,4])
+% % %
+% % Plot the control input
+% figure(4)
+% ttu = linspace(tspan(1),tspan(2),200);
+% plot(ttu,ufun(ttu),'LineWidth',2)
+% % axis([tspan [min(ufun(ttu)) max(ufun(ttu))]+(max(ufun(ttu))-min(ufun(ttu)))/20*[-1 1]])
+% grid on
 
 %% Animate the motion of the oscillator
 

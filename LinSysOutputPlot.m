@@ -15,7 +15,7 @@ tt = linspace(sol.x(1),sol.x(end),N);
 yy = C*deval(sol,tt)+D*ufun(tt);
 
 if nargin <= 6
-    LineW = 1;
+    LineW = 2;
 end
 
 
