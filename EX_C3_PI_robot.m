@@ -60,7 +60,7 @@ title('The tracking error $e(t)$','Interpreter','Latex','Fontsize',16)
 grid on
 
 
-%% Proportional-Integral control
+%% Proportional-Integral control (no disturbance!)
 
 
 
@@ -69,21 +69,22 @@ grid on
 % Choose parameters K_P to stabilize A+B*K_P*C, 
 % and the gain parameter eps>0
 
-eps = 0.27;
+eps = 0.13;
 eps = 0.05;
-eps = .2;
+% eps = .2;
+% eps = 3.5;
 
 [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,eps);
 
-figure(2)
-LinSysPlotEigs(Ae,[-1,0,-3,3])
+% figure(2)
+% LinSysPlotEigs(Ae,[-1,0,-3,3])
 
 
-%%
+% %
 
 
 yref = @(t) -4+3i;
-yref = @(t) (-4+3i)*(t<30) + (-2)*(t>=30);
+% yref = @(t) (-4+3i)*(t<30) + (-2)*(t>=30);
 % yref = @(t) 0.1*sin(0.05*t);
 
 
@@ -113,6 +114,8 @@ for ind = 1:length(tt), yrefvals(ind)=yref(tt(ind)); end
 
 figure(2)
 % Plot the output and the reference
+hold off
+cla
 plot(tt,[real(yrefvals);imag(yrefvals);real(yy);imag(yy)],'Linewidth',2)
 title(['Output for $K_P= ' num2str(K_P) '$ and $\varepsilon= ' num2str(eps) '$'],'Interpreter','Latex','Fontsize',16)
 
@@ -125,8 +128,3 @@ plot(real(yy),imag(yy),'LineWidth',2)
 plot(real(yy(:,1))',imag(yy(:,1))','bo','markersize',10,'markerfacecolor',[0, 0.4470, 0.7410],'markeredgecolor','k','linewidth',2);
 grid on
 
-%% Animate the motion of the oscillator
-
-
-figure(2)
-AnimateOsc(tt,yy);

@@ -2,7 +2,7 @@
 %
 % Copyright (C) 2019 by Lassi Paunonen (lassi.paunonen@tuni.fi)
 
-r = 1; k = 1; m = 1;
+r = 2; k = 1; m = 1;
 
 
 A = [0 1;-k/m -r/m];
@@ -25,7 +25,7 @@ C = [1 0];
  K_P = -1;
 % K_P = .65;
 %K_P = .75;
-% K_P = 0;
+K_P = 0;
 % eig(A+B*K_P*C)
 % %
 
@@ -34,28 +34,29 @@ C = [1 0];
 % Choose a gain parameter eps, sufficiently small (test)
 % eps = .4;
 
-% OPTIONAL: Use Root Locus to find the "optimal" value of epsilon.
+% % OPTIONAL: Use Root Locus to find the "optimal" value of epsilon.
+% 
+% Ae0 = [A+B*K_P*C,zeros(2,1);C,0];
+% Be0 = [B;0];
+% Ce0 = [zeros(1,2),-1/(C*((-A-B*K_P*C)\B))];
+% 
+% epsrange = linspace(0,0.7,3001);
+% [eiglocs,kvals,eps_opt] = LinSysRootLocus(Ae0,Be0,Ce0,epsrange);
+% 
+% eps= eps_opt;
 
-Ae0 = [A+B*K_P*C,zeros(2,1);C,0];
-Be0 = [B;0];
-Ce0 = [zeros(1,2),-1/(C*((-A-B*K_P*C)\B))];
 
-
-
-epsrange = linspace(0,0.7,3001);
-[eiglocs,kvals,eps_opt] = LinSysRootLocus(Ae0,Be0,Ce0,epsrange);
-
-eps= eps_opt;
 %%
 
 eps = 0.27;
-eps = 0.05;
-eps = .3;
+% eps = 0.05;
+% eps = .3;
 
 [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,eps);
 
 figure(2)
-LinSysPlotEigs(Ae,[-1,0,-3,3])
+LinSysPlotEigs(Ae,[-3,0,-3,3])
+% LinSysPlotEigs(Ae)
 
 
 %%
