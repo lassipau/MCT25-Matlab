@@ -1,4 +1,4 @@
-function [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,eps)
+function [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,epsval)
 % function [A_e,B_e,C_e,D_e] = LinSysPIClosedLoop(A,B,C,K_P,eps)
 % 
 % Form the closed-loop system (Ae,Be,Ce,De) consisting of the linear system
@@ -30,7 +30,7 @@ if rank(P0,1e-10)<p
   error('The transfer function of (A,B,C) is nearly non-surjective at s=0!')
 end
 
-K_I = -eps*pinv(P0);
+K_I = -epsval*pinv(P0);
 
 Ae = [A+B*K_P*C,B*K_I;C,zeros(p)];
 Be = [-B*K_P;-eye(p)];

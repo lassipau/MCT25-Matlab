@@ -69,12 +69,12 @@ grid on
 % Choose parameters K_P to stabilize A+B*K_P*C, 
 % and the gain parameter eps>0
 
-eps = 0.13;
-eps = 0.05;
-% eps = .2;
-% eps = 3.5;
+epsval = 0.13;
+epsval = 0.05;
+% epsval = .2;
+% epsval = 3.5;
 
-[Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,eps);
+[Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,epsval);
 
 % figure(2)
 % LinSysPlotEigs(Ae,[-1,0,-3,3])
@@ -117,7 +117,7 @@ figure(2)
 hold off
 cla
 plot(tt,[real(yrefvals);imag(yrefvals);real(yy);imag(yy)],'Linewidth',2)
-title(['Output for $K_P= ' num2str(K_P) '$ and $\varepsilon= ' num2str(eps) '$'],'Interpreter','Latex','Fontsize',16)
+title(['Output for $K_P= ' num2str(K_P) '$ and $\varepsilon= ' num2str(epsval) '$'],'Interpreter','Latex','Fontsize',16)
 
 
 figure(3)

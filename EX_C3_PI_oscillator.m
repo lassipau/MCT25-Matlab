@@ -31,8 +31,8 @@ K_P = 0;
 
 
 
-% Choose a gain parameter eps, sufficiently small (test)
-% eps = .4;
+% Choose a gain parameter epsval, sufficiently small (test)
+% epsval = .4;
 
 % % OPTIONAL: Use Root Locus to find the "optimal" value of epsilon.
 % 
@@ -43,16 +43,16 @@ K_P = 0;
 % epsrange = linspace(0,0.7,3001);
 % [eiglocs,kvals,eps_opt] = LinSysRootLocus(Ae0,Be0,Ce0,epsrange);
 % 
-% eps= eps_opt;
+epsval = eps_opt;
 
 
 %%
 
-eps = 0.27;
-% eps = 0.05;
-% eps = .3;
+epsval = 0.27;
+% epsval = 0.05;
+% epsval = .3;
 
-[Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,eps);
+[Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,epsval);
 
 figure(2)
 LinSysPlotEigs(Ae,[-3,0,-3,3])
@@ -92,7 +92,7 @@ for ind = 1:length(tt), yrefvals(ind)=yref(tt(ind)); end
 figure(1)
 % Plot the output and the reference
 plot(tt,[yrefvals;yy],'Linewidth',2)
-title(['Output for $K_P= ' num2str(K_P) '$ and $\varepsilon= ' num2str(eps) '$'],'Interpreter','Latex','Fontsize',16)
+title(['Output for $K_P= ' num2str(K_P) '$ and $\varepsilon= ' num2str(epsval) '$'],'Interpreter','Latex','Fontsize',16)
 
 %% Animate the motion of the oscillator
 
