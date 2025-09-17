@@ -27,6 +27,7 @@ ufun = LinSysTrackStab(ref_w,ref_c,PKfun);
 yref_fun = LinSysTrackRef(ref_w,ref_c);
 
 tt = linspace(0,4,301);
+uvals = zeros(1,length(tt));
 for ind = 1:length(tt)
     uvals(ind) = ufun(tt(ind));
 end
@@ -38,9 +39,14 @@ plot(tt,[uvals; k+2*pi*cos(2*pi*tt) + (k-4*m*pi^2)*sin(2*pi*tt)]);
 % The simulation is completed by applying the control "ufun" to the system
 % (A+BK,B,C+DK,D)
 
+r = 0; k = 1.1; m = .9;
+
+A = [0 1;-k/m -r/m];
+B = [0;1/m];
+
 
 % Initial state of the oscillator
-x0 = [1;0];
+x0 = [-1;1];
 
 tspan = [0, 14];
 

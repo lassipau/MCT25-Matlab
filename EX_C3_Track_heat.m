@@ -26,12 +26,12 @@ D = 0;
 ref_w = [-2*pi 0 2*pi];
 ref_c = [1i/2 1 -1i/2];
 
-% Triangle signal, only odd frequencies
-% required frequencies in the reference signal and the corresponding
-% coefficient vectors "a_k" (or in this case scalars, since p=1)
-ak = @(k) ((-1)^k-1)/(k^2*pi^2);
-ref_w = [-7*pi -5*pi -3*pi -pi 0 pi 3*pi 5*pi 7*pi];
-ref_c = [ak(-7) ak(-5) ak(-3) ak(-1) 0 ak(1) ak(3) ak(5) ak(7)];
+% % Triangle signal, only odd frequencies
+% % required frequencies in the reference signal and the corresponding
+% % coefficient vectors "a_k" (or in this case scalars, since p=1)
+% ak = @(k) ((-1)^k-1)/(k^2*pi^2);
+% ref_w = [-7*pi -5*pi -3*pi -pi 0 pi 3*pi 5*pi 7*pi];
+% ref_c = [ak(-7) ak(-5) ak(-3) ak(-1) 0 ak(1) ak(3) ak(5) ak(7)];
 
 
 % The heat system is unstable. However, we can stabilize it
@@ -49,6 +49,9 @@ PKfun = @(s) (C+D*K)*((s*eye(size(A))-A-B*K)\B)+D;
 
 ufun = LinSysTrackStab(ref_w,ref_c,PKfun);
 yref_fun = LinSysTrackRef(ref_w,ref_c);
+
+% tt = linspace(0,8,1001);
+% plot(tt,ufun(tt),'linewidth',2)
 
 %% Simulate the system
 
@@ -79,6 +82,7 @@ figure(1)
 % Plot the output and the reference
 plot(tt,[real(yrefvals);yy],'Linewidth',2)
 title(['Output of the controlled heat system.'],'Interpreter','Latex','Fontsize',16)
+
 figure(2)
 
 surf(tt(1:2:end),spgrid,xx(:,1:2:end))

@@ -54,6 +54,18 @@ epsval = 0.27;
 
 [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,epsval);
 
+
+% % Testing (lack of) robustness: Controller design for the original system,
+% % simulation for a perturbed system
+% P0 = -C*((A+B*K_P*C)\B);
+% K_I = -epsval*pinv(P0);
+% 
+% r = 1; k = 2.5; m = .3;
+% A = [0 1;-k/m -r/m];
+% 
+% [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,epsval,K_I);
+
+
 figure(2)
 LinSysPlotEigs(Ae,[-3,0,-3,3])
 % LinSysPlotEigs(Ae)

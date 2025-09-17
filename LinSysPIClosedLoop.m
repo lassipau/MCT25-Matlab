@@ -1,11 +1,13 @@
-function [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,epsval)
-% function [A_e,B_e,C_e,D_e] = LinSysPIClosedLoop(A,B,C,K_P,eps)
+function [Ae,Be,Ce,De] = LinSysPIClosedLoop(A,B,C,K_P,epsval,K_I)
+% function [A_e,B_e,C_e,D_e] = LinSysPIClosedLoop(A,B,C,K_P,eps,K_I)
 % 
 % Form the closed-loop system (Ae,Be,Ce,De) consisting of the linear system
 % (A,B,C) and a Proportional-Integral Controller (PI Controller) with the
 % parameters K_P (proportional part gain) K_I = eps*(C*(A+B*K_P*C)^{-1}B)^{-1} 
 % (integral part gain) where eps>0 is a low-gain parameter. The routine
-% tests the stability of the closed-loop system.
+% tests the stability of the closed-loop system. 
+% If the optional 6th parameter is given, uses an explicit expression for
+% K_I. Otherwise we define K_I = -epsval*pinv(P_{K_P}(0)).
 %
 % Parameters: 
 % A = nxn-matrix, B = nxm-matrix, C = pxn-matrix, 
@@ -30,7 +32,9 @@ if rank(P0,1e-10)<p
   error('The transfer function of (A,B,C) is nearly non-surjective at s=0!')
 end
 
-K_I = -epsval*pinv(P0);
+if nargin<6
+    K_I = -epsval*pinv(P0);
+end
 
 Ae = [A+B*K_P*C,B*K_I;C,zeros(p)];
 Be = [-B*K_P;-eye(p)];
