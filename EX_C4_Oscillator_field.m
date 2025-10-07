@@ -13,6 +13,10 @@ f = @(x) [x(2,:);-(g/l)*sin(x(1,:)) - (k/m)*x(2,:)];
 f1 = @(x,y) y;
 f2 = @(x,y) -(g/l)*sin(x) - (k/m)*y;
 
+
+% f = @(x) [x(2,:);-(g/l)*x(1,:) - (k/m)*x(2,:)];
+% f2 = @(x,y) -(g/l)*x - (k/m)*y;
+
 [xx,yy] = meshgrid(linspace(-5,10,20),linspace(-3,3,20));
 
 hold off
@@ -21,13 +25,28 @@ quiver(xx,yy,f1(xx,yy),f2(xx,yy))
 hold on
 xlabel('Angle $\theta(t)$','interpreter','latex','fontsize',16)
 ylabel('Velocity $\dot{\theta}(t)$','interpreter','latex','fontsize',16)
-xlim([-5,10])
+xlim([-5,5])
 axis equal
 %%
 odefun = @(t,x) [x(2);-(g/l)*sin(x(1)) - (k/m)*x(2)];
 
+odefun = @(t,x) [x(2);-(g/l)*x(1) - (k/m)*x(2)];
+
+%%
+x0 = [pi/5;.35];
 tspan = [0,16];
 
+sol = ode45(odefun,tspan,x0);
+tt = linspace(tspan(1),tspan(2),301);
+thetas = deval(sol,tt);
+plot(thetas(1,:),thetas(2,:),'r','LineWidth',2)
+
+
+axis([-5,5,-3,3])
+axis equal
+
+
+%%
 x0 = [pi/2;0];
 
 sol = ode45(odefun,tspan,x0);
@@ -35,19 +54,10 @@ tt = linspace(tspan(1),tspan(2),301);
 thetas = deval(sol,tt);
 
 
-plot(thetas(1,:),thetas(2,:),'b','LineWidth',2)
-xlim([-5,10])
+plot(thetas(1,:),thetas(2,:),'r','LineWidth',2)
+xlim([-5,5])
 % axis equal
-%%
-x0 = [-3;1.5];
 
-sol = ode45(odefun,tspan,x0);
-tt = linspace(tspan(1),tspan(2),301);
-thetas = deval(sol,tt);
-
-plot(thetas(1,:),thetas(2,:),'b','LineWidth',2)
-xlim([-5,10])
-%axis equal
 %%
 x0 = [pi/2;1.35];
 
@@ -58,19 +68,19 @@ tt = linspace(tspan(1),tspan(2),301);
 thetas = deval(sol,tt);
 
 hold on
-plot(thetas(1,:),thetas(2,:),'b','LineWidth',2)
+plot(thetas(1,:),thetas(2,:),'r','LineWidth',2)
 
 %%
-x0 = [pi/5;.35];
+x0 = [-3;1.5];
 
 sol = ode45(odefun,tspan,x0);
 tt = linspace(tspan(1),tspan(2),301);
 thetas = deval(sol,tt);
-plot(thetas(1,:),thetas(2,:),'b','LineWidth',2)
 
+plot(thetas(1,:),thetas(2,:),'r','LineWidth',2)
+xlim([-5,5])
+%axis equal
 
-axis([-5,10,-3,3])
-axis equal
 
 %% Plot the total energy (kinetic + potential energy) of the pendulum as a function of time
 figure(2)
